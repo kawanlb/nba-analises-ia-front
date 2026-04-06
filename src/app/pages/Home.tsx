@@ -63,7 +63,7 @@ export function Home() {
           <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {games.map((game) => (
             <Link
               key={game.game_id}
