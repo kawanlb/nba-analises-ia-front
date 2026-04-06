@@ -84,7 +84,8 @@ export async function fetchAIAnalysis(team1Id: string, team2Id: string) {
   } catch (error) {
     console.error("Erro ao buscar análise de IA:", error);
     return {
-      analysis: "Não foi possível gerar a análise. Certifique-se de que:\n\n1. A API FastAPI está rodando (uvicorn main:app --reload)\n2. O Ollama está instalado e rodando\n3. O modelo llama3:8b foi baixado (ollama run llama3:8b)"
+      analysis:
+        "Não foi possível gerar a análise. Verifique se a API está disponível e se a variável VITE_API_URL aponta para o backend correto."
     };
   }
 }
