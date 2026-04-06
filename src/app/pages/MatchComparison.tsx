@@ -69,6 +69,14 @@ interface MatchData {
   team1: Team;
   team2: Team;
   head_to_head: HeadToHead[];
+  top_players?: {
+    points?: Array<TopPlayerItem>;
+    rebounds?: Array<TopPlayerItem>;
+    assists?: Array<TopPlayerItem>;
+    steals?: Array<TopPlayerItem>;
+    blocks?: Array<TopPlayerItem>;
+    turnovers?: Array<TopPlayerItem>;
+  };
   top_scorers?: Array<{
     player_id: number;
     name: string;
@@ -78,6 +86,16 @@ interface MatchData {
     points: number;
     photo?: string;
   }>;
+}
+
+interface TopPlayerItem {
+  player_id: number;
+  name: string;
+  team_id: number;
+  team: string;
+  team_abbreviation: string;
+  value: number;
+  photo?: string;
 }
 
 type MatchTab = "stats" | "players" | "h2h" | "analysis" | "about";
@@ -155,12 +173,11 @@ export function MatchComparison() {
 
   const { team1, team2, head_to_head } = matchData;
   const topScorers = matchData.top_scorers || [];
-  const team1Scorers = topScorers.filter((p) => p.team_id === team1.info.id).slice(0, 10);
-  const team2Scorers = topScorers.filter((p) => p.team_id === team2.info.id).slice(0, 10);
+  const topByMetric = matchData.top_players?.[activePlayerMetric] || [];
+  const team1Scorers = topByMetric.filter((p) => p.team_id === team1.info.id).slice(0, 10);
+  const team2Scorers = topByMetric.filter((p) => p.team_id === team2.info.id).slice(0, 10);
 
   const selectedMetricLabel = playerMetricLabel[activePlayerMetric];
-  const team1MetricPlayer = team1.players[activePlayerMetric];
-  const team2MetricPlayer = team2.players[activePlayerMetric];
 
   return (
     <div className="w-full">
@@ -312,27 +329,41 @@ export function MatchComparison() {
                   </select>
                 </div>
 
-                <div className="grid md:grid-cols-[1fr_auto_1fr] gap-3 items-center mb-5">
-                  <PlayerHighlight player={team1MetricPlayer} team={team1.info} align="left" label={selectedMetricLabel} />
-                  <span className="text-xs font-bold text-gray-600 dark:text-gray-300 justify-self-center">VS</span>
-                  <PlayerHighlight player={team2MetricPlayer} team={team2.info} align="right" label={selectedMetricLabel} />
-                </div>
-
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Top pontuadores {team1.info.abbreviation}</h4>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                      TOP {selectedMetricLabel} - {team1.info.abbreviation}
+                    </h4>
                     <div className="space-y-2">
-                      {team1Scorers.map((scorer) => (
-                        <ScorerRow key={scorer.player_id} scorer={scorer} />
-                      ))}
+                      {team1Scorers.length > 0 ? (
+                        team1Scorers.map((scorer) => (
+                          <ScorerRow
+                            key={`${activePlayerMetric}-${scorer.player_id}`}
+                            scorer={scorer}
+                            label={selectedMetricLabel}
+                          />
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Sem dados para este filtro.</p>
+                      )}
                     </div>
                   </div>
                   <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Top pontuadores {team2.info.abbreviation}</h4>
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                      TOP {selectedMetricLabel} - {team2.info.abbreviation}
+                    </h4>
                     <div className="space-y-2">
-                      {team2Scorers.map((scorer) => (
-                        <ScorerRow key={scorer.player_id} scorer={scorer} />
-                      ))}
+                      {team2Scorers.length > 0 ? (
+                        team2Scorers.map((scorer) => (
+                          <ScorerRow
+                            key={`${activePlayerMetric}-${scorer.player_id}`}
+                            scorer={scorer}
+                            label={selectedMetricLabel}
+                          />
+                        ))
+                      ) : (
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Sem dados para este filtro.</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -484,37 +515,12 @@ function QuickFact({ label, value }: { label: string; value: string }) {
   );
 }
 
-function PlayerHighlight({
-  player,
-  team,
-  label,
-  align,
-}: {
-  player: Player;
-  team: TeamInfo;
-  label: string;
-  align: "left" | "right";
-}) {
-  const value = player.value?.toFixed(1) || "-";
-  return (
-    <div className={`rounded-lg border border-gray-200 dark:border-gray-800 p-3 ${align === "right" ? "text-right" : "text-left"}`}>
-      <p className="text-xs text-gray-700 dark:text-gray-300 mb-1">{label}</p>
-      <p className="text-sm font-semibold text-gray-900 dark:text-white">{player.name}</p>
-      <p className="text-xs text-gray-700 dark:text-gray-300">{team.abbreviation}</p>
-      <p className="text-base font-bold text-orange-500 mt-1">{value}</p>
-    </div>
-  );
-}
-
 function ScorerRow({
   scorer,
+  label,
 }: {
-  scorer: {
-    player_id: number;
-    name: string;
-    points: number;
-    photo?: string;
-  };
+  scorer: TopPlayerItem;
+  label: string;
 }) {
   return (
     <div className="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2">
@@ -526,7 +532,7 @@ function ScorerRow({
         )}
         <span className="text-sm text-gray-900 dark:text-white truncate">{scorer.name}</span>
       </div>
-      <span className="text-sm font-semibold text-orange-500">{scorer.points.toFixed(1)} PTS</span>
+      <span className="text-sm font-semibold text-orange-500">{scorer.value.toFixed(1)} {label}</span>
     </div>
   );
 }
