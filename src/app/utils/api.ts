@@ -87,3 +87,27 @@ export async function fetchAIAnalysis(team1Id: string, team2Id: string) {
     };
   }
 }
+
+export async function fetchTopScorers(
+  limit = 15,
+): Promise<
+  Array<{
+    player_id: number;
+    name: string;
+    team_id: number;
+    team: string;
+    team_abbreviation: string;
+    points: number;
+    photo?: string;
+  }>
+> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/players/top-scorers?limit=${limit}`);
+    if (!response.ok) throw new Error("Failed to fetch top scorers");
+    const data = await response.json();
+    return data?.top_scorers || [];
+  } catch (error) {
+    console.error("Erro ao buscar ranking global de jogadores:", error);
+    return [];
+  }
+}

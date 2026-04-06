@@ -9,7 +9,7 @@ import {
   Sparkles,
   Info,
 } from "lucide-react";
-import { fetchUpcomingGames, fetchMatchComparison } from "../utils/api";
+import { fetchUpcomingGames, fetchTopScorers } from "../utils/api";
 import { formatDateBR, formatGameTimeBR } from "../utils/datetime";
 
 interface Team {
@@ -24,43 +24,6 @@ interface Game {
   time: string;
   home_team: Team;
   away_team: Team;
-}
-
-interface MatchComparisonData {
-  top_scorers?: Array<{
-    player_id: number;
-    name: string;
-    team: string;
-    team_abbreviation: string;
-    points: number;
-    photo?: string;
-  }>;
-  team1: {
-    info: Team;
-    players: {
-      points?: { name: string; value?: number };
-      rebounds?: { name: string; value?: number };
-      assists?: { name: string; value?: number };
-      steals?: { name: string; value?: number };
-      blocks?: { name: string; value?: number };
-      turnovers?: { name: string; value?: number };
-      fg_pct?: { name: string; percentage?: number; made?: number };
-      fg3_pct?: { name: string; percentage?: number; made?: number };
-    };
-  };
-  team2: {
-    info: Team;
-    players: {
-      points?: { name: string; value?: number };
-      rebounds?: { name: string; value?: number };
-      assists?: { name: string; value?: number };
-      steals?: { name: string; value?: number };
-      blocks?: { name: string; value?: number };
-      turnovers?: { name: string; value?: number };
-      fg_pct?: { name: string; percentage?: number; made?: number };
-      fg3_pct?: { name: string; percentage?: number; made?: number };
-    };
-  };
 }
 
 interface TopPerformer {
@@ -90,30 +53,15 @@ export function Home() {
     const data = await fetchUpcomingGames();
     setGames(data);
 
-    if (data.length > 0) {
-      await loadTopPerformers(data[0]);
-    } else {
-      setTopPerformers([]);
-    }
+    await loadTopPerformers();
 
     setLoading(false);
   }
 
-  async function loadTopPerformers(featuredGame: Game) {
+  async function loadTopPerformers() {
     setPerformanceLoading(true);
 
-    const matchData = (await fetchMatchComparison(
-      String(featuredGame.home_team.id),
-      String(featuredGame.away_team.id),
-    )) as MatchComparisonData | null;
-
-    if (!matchData) {
-      setTopPerformers([]);
-      setPerformanceLoading(false);
-      return;
-    }
-
-    let scorers = (matchData.top_scorers || [])
+    const scorers = (await fetchTopScorers(MAX_PERFORMERS))
       .filter((player) => player.name && player.points > 0)
       .sort((a, b) => b.points - a.points)
       .slice(0, MAX_PERFORMERS)
@@ -124,23 +72,6 @@ export function Home() {
         value: player.points,
         photo: player.photo,
       }));
-
-    if (scorers.length === 0) {
-      scorers = [
-        {
-          key: `fallback-points-${matchData.team1.info.id}`,
-          player: matchData.team1.players.points?.name || "-",
-          team: matchData.team1.info.name,
-          value: matchData.team1.players.points?.value || 0,
-        },
-        {
-          key: `fallback-points-${matchData.team2.info.id}`,
-          player: matchData.team2.players.points?.name || "-",
-          team: matchData.team2.info.name,
-          value: matchData.team2.players.points?.value || 0,
-        },
-      ].filter((player) => player.player !== "-" && player.value > 0);
-    }
 
     setTopPerformers(scorers);
     setShowAllPerformers(false);
