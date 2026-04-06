@@ -204,9 +204,9 @@ export function MatchComparison() {
                 <div key={scorer.player_id} className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-800/60 px-3 py-2">
                   <div className="flex items-center gap-2 min-w-0">
                     {scorer.photo ? (
-                      <img src={scorer.photo} alt={scorer.name} className="w-7 h-7 rounded-full object-cover" />
+                      <img src={scorer.photo} alt={scorer.name} className="w-9 h-9 rounded-full object-cover" />
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700" />
+                      <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700" />
                     )}
                     <div className="min-w-0">
                       <p className="text-sm text-gray-900 dark:text-white truncate">{scorer.name}</p>
@@ -520,9 +520,9 @@ function ScorerRow({
     <div className="flex items-center justify-between gap-2 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-3 py-2">
       <div className="flex items-center gap-2 min-w-0">
         {scorer.photo ? (
-          <img src={scorer.photo} alt={scorer.name} className="w-7 h-7 rounded-full object-cover" loading="lazy" />
+          <img src={scorer.photo} alt={scorer.name} className="w-9 h-9 rounded-full object-cover" loading="lazy" />
         ) : (
-          <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700" />
+          <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700" />
         )}
         <span className="text-sm text-gray-900 dark:text-white truncate">{scorer.name}</span>
       </div>

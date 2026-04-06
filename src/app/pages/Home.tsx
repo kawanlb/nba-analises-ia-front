@@ -274,11 +274,11 @@ export function Home() {
                           <img
                             src={performer.photo}
                             alt={performer.player}
-                            className="w-8 h-8 rounded-full object-cover bg-gray-100 dark:bg-gray-800"
+                            className="w-10 h-10 rounded-full object-cover bg-gray-100 dark:bg-gray-800"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800" />
+                          <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800" />
                         )}
                         <div className="min-w-0">
                           <p className="font-medium text-gray-900 dark:text-white text-sm truncate">{performer.player}</p>
