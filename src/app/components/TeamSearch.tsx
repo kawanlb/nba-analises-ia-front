@@ -118,12 +118,12 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
     <div className="relative" ref={searchRef}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="relative">
-          <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+          <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wide">
             Time 1
           </p>
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
               size={18}
             />
             <input
@@ -142,7 +142,7 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
               <button
                 type="button"
                 onClick={() => handleClearTeam("team1")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition-colors"
                 aria-label="Limpar time 1"
               >
                 <X size={16} />
@@ -168,7 +168,7 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       {team.name}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-600 dark:text-gray-300">
                       {team.abbreviation}
                     </p>
                   </div>
@@ -179,12 +179,12 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
         </div>
 
         <div className="relative">
-          <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1.5 uppercase tracking-wide">
+          <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1.5 uppercase tracking-wide">
             Time 2
           </p>
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-300"
               size={18}
             />
             <input
@@ -203,7 +203,7 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
               <button
                 type="button"
                 onClick={() => handleClearTeam("team2")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition-colors"
                 aria-label="Limpar time 2"
               >
                 <X size={16} />
@@ -229,7 +229,7 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
                     <p className="text-sm font-semibold text-gray-900 dark:text-white">
                       {team.name}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-gray-600 dark:text-gray-300">
                       {team.abbreviation}
                     </p>
                   </div>
@@ -250,19 +250,19 @@ export function TeamSearch({ onCompare }: TeamSearchProps) {
           <ArrowRightLeft size={16} />
           Comparar Times
         </button>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-700 dark:text-gray-300">
           Selecione dois times para abrir a comparação.
         </p>
       </div>
 
       {openField === "team1" && team1Query && filteredTeam1.length === 0 && (
-        <div className="mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-300">
           Nenhum time encontrado para o Time 1.
         </div>
       )}
 
       {openField === "team2" && team2Query && filteredTeam2.length === 0 && (
-        <div className="mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-500 dark:text-gray-400">
+        <div className="mt-2 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-600 dark:text-gray-300">
           Nenhum time encontrado para o Time 2.
         </div>
       )}

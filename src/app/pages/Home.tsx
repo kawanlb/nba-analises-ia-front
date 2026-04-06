@@ -160,7 +160,7 @@ export function Home() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors">
           Jogos da NBA
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 transition-colors">
+        <p className="text-gray-700 dark:text-gray-300 transition-colors">
           Clique em um jogo para ver estatísticas e análise detalhada
         </p>
       </div>
@@ -173,7 +173,7 @@ export function Home() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                 Comparar Times
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Pesquise e selecione dois times para comparar estatísticas
               </p>
             </div>
@@ -195,7 +195,7 @@ export function Home() {
                   <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all hover:shadow-md">
                     <div className="p-5">
                       {/* Date and Time */}
-                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4 pb-3 border-b border-gray-100 dark:border-gray-800 transition-colors">
+                      <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 mb-4 pb-3 border-b border-gray-100 dark:border-gray-800 transition-colors">
                         <div className="flex items-center gap-1.5">
                           <Calendar size={14} />
                           <span>{formatDateBR(game.date)}</span>
@@ -222,7 +222,7 @@ export function Home() {
                               <p className="text-gray-900 dark:text-white font-semibold text-base transition-colors">
                                 {game.away_team.name}
                               </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">Visitante</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-300">Visitante</p>
                             </div>
                           </div>
                         </div>
@@ -241,7 +241,7 @@ export function Home() {
                               <p className="text-gray-900 dark:text-white font-semibold text-base transition-colors">
                                 {game.home_team.name}
                               </p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">Casa</p>
+                              <p className="text-xs text-gray-600 dark:text-gray-300">Casa</p>
                             </div>
                           </div>
                           <ChevronRight className="text-gray-400 dark:text-gray-600 group-hover:text-orange-500 transition-colors" size={20} />
@@ -303,18 +303,18 @@ export function Home() {
                         className="w-10 h-10 object-contain"
                       />
                       <div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Casa</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Casa</p>
                         <p className="font-semibold text-gray-900 dark:text-white leading-tight">
                           {featuredGame.home_team.name}
                         </p>
                       </div>
                     </div>
 
-                    <div className="text-gray-400 dark:text-gray-600 font-bold">VS</div>
+                    <div className="text-gray-600 dark:text-gray-300 font-bold">VS</div>
 
                     <div className="flex items-center gap-3 justify-end text-right">
                       <div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Visitante</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">Visitante</p>
                         <p className="font-semibold text-gray-900 dark:text-white leading-tight">
                           {featuredGame.away_team.name}
                         </p>
@@ -337,7 +337,7 @@ export function Home() {
                 <Trophy className="w-5 h-5 text-orange-500" />
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Jogadores com maior desempenho</h2>
               </div>
-              <span className="text-xs text-gray-500 dark:text-gray-400">ranking por pontos</span>
+              <span className="text-xs text-gray-600 dark:text-gray-300">ranking por pontos</span>
             </div>
 
             {performanceLoading ? (
@@ -365,11 +365,11 @@ export function Home() {
                         )}
                         <div className="min-w-0">
                           <p className="font-medium text-gray-900 dark:text-white text-sm truncate">{performer.player}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{performer.team}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-300 truncate">{performer.team}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-500 dark:text-gray-400">#{index + 1}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-300">#{index + 1}</p>
                         <p className="font-semibold text-orange-500 text-sm">
                           {performer.value.toFixed(1)} PTS
                         </p>
@@ -391,7 +391,7 @@ export function Home() {
                 )}
               </>
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-gray-300">
                 Não foi possível carregar os destaques dos jogadores no momento.
               </p>
             )}
@@ -402,7 +402,7 @@ export function Home() {
               <Info className="w-5 h-5 text-orange-500" />
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Sobre</h2>
             </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               Esta página reúne jogos da NBA em andamento e próximos confrontos para facilitar sua análise.
               Você consegue comparar duas equipes, visualizar estatísticas-chave, conferir jogadores em destaque
               e gerar uma análise com IA para apoiar seus palpites.

@@ -29,7 +29,7 @@ export function ApiStatus() {
 
   if (status === "checking") {
     return (
-      <div className="flex items-center gap-2 text-gray-500 text-xs">
+      <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300 text-xs">
         <Loader2 size={14} className="animate-spin" />
         <span className="hidden sm:inline">Verificando...</span>
       </div>
@@ -38,7 +38,7 @@ export function ApiStatus() {
 
   if (status === "connected") {
     return (
-      <div className="flex items-center gap-2 text-green-600 text-xs">
+      <div className="flex items-center gap-2 text-green-700 dark:text-green-400 text-xs">
         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
         <span className="hidden sm:inline font-medium">API Online</span>
       </div>
@@ -46,7 +46,7 @@ export function ApiStatus() {
   }
 
   return (
-    <div className="flex items-center gap-2 text-orange-600 text-xs">
+    <div className="flex items-center gap-2 text-orange-700 dark:text-orange-400 text-xs">
       <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
       <span className="hidden sm:inline font-medium">Modo Offline</span>
     </div>
