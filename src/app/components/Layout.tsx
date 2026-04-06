@@ -11,7 +11,7 @@ export function Layout() {
     <div className="min-h-screen bg-[#f8f8f8] dark:bg-[#181829] transition-colors">
       {/* Header */}
       <header className="bg-white dark:bg-[#1e1e2e] border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm transition-colors">
-        <div className="container mx-auto px-4">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
@@ -59,7 +59,7 @@ export function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 max-w-7xl">
+      <main className="max-w-[1600px] mx-auto w-full px-4 md:px-6 py-6">
         <Outlet />
       </main>
     </div>
