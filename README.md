@@ -1,55 +1,104 @@
-# NBA Analises IA Front
+# NBA Analises IA — Frontend
 
-Aplicacao front-end para visualizar jogos da NBA, comparar dois times e exibir analise textual gerada por IA.
+Interface web desenvolvida em React para apresentar jogos da NBA, comparar equipes e exibir análises geradas por IA.
 
-## Stack
+## Visão do projeto
 
-- React 18
-- Vite 6
+O frontend foi criado para transformar os dados do backend em uma interface visual clara, responsiva e fácil de usar. A proposta é permitir que o usuário acompanhe jogos futuros, compare times e consulte estatísticas importantes de forma organizada.
+
+## Objetivo
+
+A aplicação tem como objetivo principal apresentar informações esportivas de forma didática e visualmente agradável, oferecendo:
+
+- lista de jogos futuros
+- jogo em destaque
+- comparação entre equipes
+- estatísticas e histórico de confrontos
+- jogadores com melhor desempenho
+- análise textual com IA
+
+## Tecnologias utilizadas
+
+- React
 - TypeScript
+- Vite
 - Tailwind CSS
-- Componentes Radix UI
+- React Router
+- Lucide React
 
-## Requisitos
+## Funcionalidades principais
 
-- Node.js 18+
-- npm 9+
+### Página inicial
+A tela inicial exibe:
+- jogos futuros da NBA
+- card de destaque do próximo confronto
+- lista dos principais jogadores por pontuação
+- explicação resumida sobre o sistema
 
-## Instalar dependencias
+### Página de comparação
+A tela de comparação organiza os dados em seções:
+- Estatísticas
+- Jogadores
+- H2H
+- Análise IA
+- Sobre
+
+### Tema visual
+A interface suporta modo claro e escuro, com foco em contraste, legibilidade e adaptação a telas grandes e pequenas.
+
+## Integração com o backend
+
+O frontend consome a API FastAPI por meio dos endpoints:
+
+- `GET /games/upcoming`
+- `GET /match/{team1_id}/{team2_id}`
+- `GET /analysis/{team1_id}/{team2_id}`
+
+Se a API não estiver disponível, a aplicação mantém parte da experiência visual com dados mock.
+
+## Estrutura principal
+
+- `src/app/components` — componentes reutilizáveis
+- `src/app/pages` — páginas principais da aplicação
+- `src/app/utils` — funções auxiliares e chamadas de API
+- `src/styles` — estilos globais e tema visual
+
+## Como executar
+
+### 1. Instalar dependências
 
 ```bash
 npm install
 ```
 
-## Rodar em desenvolvimento
+### 2. Configurar a API
+
+Se o backend estiver em outro endereço, criar um arquivo `.env` com:
+
+```bash
+VITE_API_URL=http://localhost:8000
+```
+
+### 3. Iniciar o frontend
 
 ```bash
 npm run dev
 ```
 
-Por padrao, o front usa `/api` como base das requisicoes.
+## Requisitos do sistema
 
-## Configurar URL da API (opcional)
+Para funcionar completamente, o projeto depende de:
 
-Se a API estiver em outro host/porta, crie um arquivo `.env` na raiz com:
+- backend FastAPI rodando
+- Ollama instalado
+- modelo `llama3:8b` carregado
+- dependências Python instaladas no backend
 
-```bash
-VITE_API_URL=http://127.0.0.1:8000
-```
+## Resultado esperado
 
-## Build de producao
+Ao abrir a aplicação, o usuário consegue navegar por jogos da NBA, comparar times, visualizar estatísticas e consultar análises de forma clara e organizada.
 
-```bash
-npm run build
-```
+## Observações
 
-## Rotas da aplicacao
-
-- `/` lista de proximos jogos
-- `/match/:team1Id/:team2Id` comparacao entre times
-- `/analysis/:team1Id/:team2Id` analise textual do confronto
-
-## Observacoes
-
-- Este repositorio contem apenas o front-end.
-- Se a API estiver indisponivel, a tela inicial utiliza dados mock para exibicao basica.
+- O projeto foi desenvolvido com foco em apresentação acadêmica e demonstração de integração entre frontend, backend e IA.
+- O layout foi pensado para funcionar bem em monitores grandes, mantendo boa usabilidade em telas menores.
