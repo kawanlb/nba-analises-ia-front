@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
-import { Loader2, ArrowLeft, Sparkles, TrendingUp, TrendingDown } from "lucide-react";
+import { Loader2, ArrowLeft, Sparkles, TrendingUp } from "lucide-react";
 import { fetchMatchComparison, fetchAIAnalysis } from "../utils/api";
 
 interface TeamInfo {
@@ -99,11 +99,22 @@ export function MatchComparison() {
 
   if (!matchData) {
     return (
-      <div className="max-w-4xl mx-auto text-center">
-        <p className="text-white text-xl mb-4">Dados não disponíveis</p>
-        <Link to="/" className="text-orange-500 hover:text-orange-400">
-          ← Voltar para jogos
-        </Link>
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center transition-colors">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 transition-colors">
+            Dados não disponíveis
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 transition-colors">
+            Não foi possível carregar os dados deste confronto
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium"
+          >
+            <ArrowLeft size={18} />
+            Voltar para jogos
+          </Link>
+        </div>
       </div>
     );
   }
@@ -111,62 +122,62 @@ export function MatchComparison() {
   const { team1, team2, head_to_head } = matchData;
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Header */}
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-gray-300 hover:text-white mb-8 transition-colors"
+        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors font-medium"
       >
-        <ArrowLeft size={20} />
-        Voltar para jogos
+        <ArrowLeft size={18} />
+        Voltar
       </Link>
 
-      {/* Teams Comparison */}
-      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-8 mb-8">
-        <div className="grid md:grid-cols-3 gap-8 items-center">
+      {/* Teams Header */}
+      <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 mb-6 transition-colors">
+        <div className="grid md:grid-cols-3 gap-6 items-center">
           {/* Team 1 */}
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto bg-white/10 rounded-xl flex items-center justify-center mb-4">
+            <div className="w-20 h-20 mx-auto bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center mb-3 transition-colors">
               <img
                 src={team1.info.logo}
                 alt={team1.info.name}
-                className="w-24 h-24 object-contain"
+                className="w-16 h-16 object-contain"
               />
             </div>
-            <h2 className="text-2xl font-bold text-white">{team1.info.name}</h2>
-            <p className="text-gray-400">{team1.info.abbreviation}</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">{team1.info.name}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{team1.info.abbreviation}</p>
           </div>
 
           {/* VS */}
           <div className="text-center">
-            <div className="text-4xl font-bold text-orange-500">VS</div>
+            <div className="text-2xl font-bold text-gray-400 dark:text-gray-600">VS</div>
           </div>
 
           {/* Team 2 */}
           <div className="text-center">
-            <div className="w-32 h-32 mx-auto bg-white/10 rounded-xl flex items-center justify-center mb-4">
+            <div className="w-20 h-20 mx-auto bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-center mb-3 transition-colors">
               <img
                 src={team2.info.logo}
                 alt={team2.info.name}
-                className="w-24 h-24 object-contain"
+                className="w-16 h-16 object-contain"
               />
             </div>
-            <h2 className="text-2xl font-bold text-white">{team2.info.name}</h2>
-            <p className="text-gray-400">{team2.info.abbreviation}</p>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">{team2.info.name}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{team2.info.abbreviation}</p>
           </div>
         </div>
 
         {/* AI Analysis Button */}
-        <div className="mt-8 text-center">
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-800 text-center">
           <button
             onClick={loadAIAnalysis}
             disabled={loadingAI}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all disabled:opacity-50 font-medium shadow-sm"
           >
             {loadingAI ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Gerando análise...
+                Gerando análise com IA...
               </>
             ) : (
               <>
@@ -179,121 +190,143 @@ export function MatchComparison() {
 
         {/* AI Analysis Result */}
         {aiAnalysis && (
-          <div className="mt-6 bg-gradient-to-r from-purple-900/20 to-pink-900/20 border border-purple-500/30 rounded-lg p-6">
+          <div className="mt-6 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-6 transition-colors">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="w-5 h-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-white">Análise com IA</h3>
+              <Sparkles className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <h3 className="text-base font-semibold text-gray-900 dark:text-white transition-colors">Análise com IA</h3>
             </div>
-            <p className="text-gray-300 whitespace-pre-line">{aiAnalysis}</p>
+            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed text-sm transition-colors">
+              {aiAnalysis}
+            </p>
           </div>
         )}
       </div>
 
       {/* Stats Comparison */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
         {/* Team 1 Stats */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Estatísticas - {team1.info.abbreviation}
-          </h3>
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200 dark:border-gray-800">
+            <img src={team1.info.logo} alt="" className="w-8 h-8" />
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors">
+              Estatísticas - {team1.info.abbreviation}
+            </h3>
+          </div>
           <div className="space-y-4">
-            <StatRow label="Pontos" value={team1.stats.points} />
-            <StatRow label="Pontos Sofridos" value={team1.stats.points_allowed} />
-            <StatRow label="Rebotes" value={team1.stats.rebounds} />
-            <StatRow label="Assistências" value={team1.stats.assists} />
-            <StatRow label="Turnovers" value={team1.stats.turnovers} />
-            <StatRow label="FG%" value={`${team1.stats.fg_pct}%`} />
+            <StatRow label="Pontos por jogo" value={team1.stats.points.toFixed(1)} />
+            <StatRow label="Pontos sofridos" value={team1.stats.points_allowed.toFixed(1)} />
+            <StatRow label="Rebotes" value={team1.stats.rebounds.toFixed(1)} />
+            <StatRow label="Assistências" value={team1.stats.assists.toFixed(1)} />
+            <StatRow label="Turnovers" value={team1.stats.turnovers.toFixed(1)} />
+            <StatRow label="FG%" value={`${team1.stats.fg_pct.toFixed(1)}%`} />
           </div>
         </div>
 
         {/* Team 2 Stats */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Estatísticas - {team2.info.abbreviation}
-          </h3>
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200 dark:border-gray-800">
+            <img src={team2.info.logo} alt="" className="w-8 h-8" />
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors">
+              Estatísticas - {team2.info.abbreviation}
+            </h3>
+          </div>
           <div className="space-y-4">
-            <StatRow label="Pontos" value={team2.stats.points} />
-            <StatRow label="Pontos Sofridos" value={team2.stats.points_allowed} />
-            <StatRow label="Rebotes" value={team2.stats.rebounds} />
-            <StatRow label="Assistências" value={team2.stats.assists} />
-            <StatRow label="Turnovers" value={team2.stats.turnovers} />
-            <StatRow label="FG%" value={`${team2.stats.fg_pct}%`} />
+            <StatRow label="Pontos por jogo" value={team2.stats.points.toFixed(1)} />
+            <StatRow label="Pontos sofridos" value={team2.stats.points_allowed.toFixed(1)} />
+            <StatRow label="Rebotes" value={team2.stats.rebounds.toFixed(1)} />
+            <StatRow label="Assistências" value={team2.stats.assists.toFixed(1)} />
+            <StatRow label="Turnovers" value={team2.stats.turnovers.toFixed(1)} />
+            <StatRow label="FG%" value={`${team2.stats.fg_pct.toFixed(1)}%`} />
           </div>
         </div>
       </div>
 
       {/* Top Players */}
-      <div className="grid md:grid-cols-2 gap-8 mb-8">
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
         {/* Team 1 Players */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Melhores Jogadores - {team1.info.abbreviation}
-          </h3>
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200 dark:border-gray-800">
+            <TrendingUp className="w-5 h-5 text-orange-500" />
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors">
+              Melhores Jogadores - {team1.info.abbreviation}
+            </h3>
+          </div>
           <div className="space-y-3">
             <PlayerStat label="Pontos" player={team1.players.points} />
             <PlayerStat label="Rebotes" player={team1.players.rebounds} />
             <PlayerStat label="Assistências" player={team1.players.assists} />
-            <PlayerStat label="Roubos de Bola" player={team1.players.steals} />
+            <PlayerStat label="Roubos" player={team1.players.steals} />
             <PlayerStat label="Bloqueios" player={team1.players.blocks} />
           </div>
         </div>
 
         {/* Team 2 Players */}
-        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-          <h3 className="text-xl font-bold text-white mb-6">
-            Melhores Jogadores - {team2.info.abbreviation}
-          </h3>
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+          <div className="flex items-center gap-3 mb-5 pb-4 border-b border-gray-200 dark:border-gray-800">
+            <TrendingUp className="w-5 h-5 text-orange-500" />
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white transition-colors">
+              Melhores Jogadores - {team2.info.abbreviation}
+            </h3>
+          </div>
           <div className="space-y-3">
             <PlayerStat label="Pontos" player={team2.players.points} />
             <PlayerStat label="Rebotes" player={team2.players.rebounds} />
             <PlayerStat label="Assistências" player={team2.players.assists} />
-            <PlayerStat label="Roubos de Bola" player={team2.players.steals} />
+            <PlayerStat label="Roubos" player={team2.players.steals} />
             <PlayerStat label="Bloqueios" player={team2.players.blocks} />
           </div>
         </div>
       </div>
 
       {/* Head to Head */}
-      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6">
-        <h3 className="text-xl font-bold text-white mb-6">
-          Histórico de Confrontos (Últimos 5 jogos)
+      <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-5 pb-4 border-b border-gray-200 dark:border-gray-800 transition-colors">
+          Histórico de Confrontos
         </h3>
-        <div className="space-y-4">
+        <div className="space-y-3">
           {head_to_head.map((game, index) => (
             <div
               key={index}
-              className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between"
+              className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 transition-colors"
             >
-              <div className="flex items-center gap-4 flex-1">
-                <span className="text-gray-400 text-sm">{game.date}</span>
-                <div className="flex items-center gap-3">
-                  <img
-                    src={game.home_team.logo}
-                    alt={game.home_team.name}
-                    className="w-8 h-8"
-                  />
-                  <span className="text-white font-medium">
-                    {game.home_team.abbreviation}
-                  </span>
-                </div>
-                <span className="text-orange-500 font-bold">
-                  {game.score.home} - {game.score.away}
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                  {new Date(game.date).toLocaleDateString('pt-BR')}
                 </span>
-                <div className="flex items-center gap-3">
-                  <span className="text-white font-medium">
-                    {game.away_team.abbreviation}
-                  </span>
-                  <img
-                    src={game.away_team.logo}
-                    alt={game.away_team.name}
-                    className="w-8 h-8"
-                  />
+                
+                <div className="flex items-center gap-4 flex-1 justify-center">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={game.home_team.logo}
+                      alt={game.home_team.name}
+                      className="w-6 h-6"
+                    />
+                    <span className="text-gray-900 dark:text-white font-semibold text-sm">
+                      {game.home_team.abbreviation}
+                    </span>
+                  </div>
+                  
+                  <div className="px-4 py-1 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+                    <span className={`font-bold text-sm ${game.score.home > game.score.away ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                      {game.score.home}
+                    </span>
+                    <span className="text-gray-400 dark:text-gray-600 mx-2">-</span>
+                    <span className={`font-bold text-sm ${game.score.away > game.score.home ? 'text-green-600 dark:text-green-400' : 'text-gray-600 dark:text-gray-400'}`}>
+                      {game.score.away}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-900 dark:text-white font-semibold text-sm">
+                      {game.away_team.abbreviation}
+                    </span>
+                    <img
+                      src={game.away_team.logo}
+                      alt={game.away_team.name}
+                      className="w-6 h-6"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="ml-4">
-                <span className="text-green-400 text-sm font-medium">
-                  Vencedor: {game.winner}
-                </span>
               </div>
             </div>
           ))}
@@ -305,24 +338,24 @@ export function MatchComparison() {
 
 function StatRow({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="text-gray-400">{label}</span>
-      <span className="text-white font-semibold">{value}</span>
+    <div className="flex justify-between items-center py-2">
+      <span className="text-gray-600 dark:text-gray-400 text-sm transition-colors">{label}</span>
+      <span className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">{value}</span>
     </div>
   );
 }
 
 function PlayerStat({ label, player }: { label: string; player: Player }) {
   return (
-    <div className="bg-white/5 rounded-lg p-3">
+    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-colors">
       <div className="flex justify-between items-center">
         <div>
-          <p className="text-xs text-gray-400">{label}</p>
-          <p className="text-white font-semibold">{player.name}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{label}</p>
+          <p className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">{player.name}</p>
         </div>
         <div className="text-right">
-          <p className="text-orange-500 font-bold text-lg">
-            {player.value || player.percentage || "-"}
+          <p className="text-orange-600 dark:text-orange-400 font-bold text-base">
+            {player.value?.toFixed(1) || player.percentage?.toFixed(1) || "-"}
           </p>
         </div>
       </div>

@@ -1,39 +1,56 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { Home, BarChart3, Sparkles } from "lucide-react";
+import { Home, Sun, Moon } from "lucide-react";
 import { ApiStatus } from "./ApiStatus";
+import { useTheme } from "../contexts/ThemeContext";
 
 export function Layout() {
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="min-h-screen bg-[#f8f8f8] dark:bg-[#181829] transition-colors">
       {/* Header */}
-      <header className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+      <header className="bg-white dark:bg-[#1e1e2e] border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50 shadow-sm transition-colors">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">🏀</span>
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">🏀</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">NBA Analytics</h1>
-                <p className="text-xs text-gray-400">Powered by AI</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">
+                  NBA Stats
+                </h1>
               </div>
             </Link>
 
             <div className="flex items-center gap-4">
               <ApiStatus />
+              
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+                aria-label="Toggle theme"
+              >
+                {theme === "light" ? (
+                  <Moon size={18} className="text-gray-700 dark:text-gray-300" />
+                ) : (
+                  <Sun size={18} className="text-gray-700 dark:text-gray-300" />
+                )}
+              </button>
+
               <nav className="flex gap-2">
                 <Link
                   to="/"
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all text-sm font-medium ${
                     location.pathname === "/"
-                      ? "bg-orange-600 text-white"
-                      : "text-gray-300 hover:bg-white/10"
+                      ? "bg-orange-500 text-white"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
-                  <Home size={18} />
-                  <span className="hidden sm:inline">Jogos</span>
+                  <Home size={16} />
+                  <span>Jogos</span>
                 </Link>
               </nav>
             </div>
@@ -42,16 +59,9 @@ export function Layout() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6 max-w-7xl">
         <Outlet />
       </main>
-
-      {/* Footer */}
-      <footer className="bg-black/30 backdrop-blur-md border-t border-white/10 mt-16">
-        <div className="container mx-auto px-4 py-6 text-center text-gray-400 text-sm">
-          <p>NBA Analytics Frontend</p>
-        </div>
-      </footer>
     </div>
   );
 }

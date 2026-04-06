@@ -1,55 +1,94 @@
-# NBA Analises IA Front
+# NBA Analytics Frontend
 
-Aplicacao front-end para visualizar jogos da NBA, comparar dois times e exibir analise textual gerada por IA.
+Frontend React para a API de análise de jogos da NBA com IA.
 
-## Stack
+## 🏀 Recursos
 
-- React 18
-- Vite 6
-- TypeScript
-- Tailwind CSS
-- Componentes Radix UI
+- **Jogos Futuros**: Visualize os próximos jogos da NBA
+- **Comparação de Times**: Estatísticas detalhadas e histórico de confrontos
+- **Análise com IA**: Análise gerada por Ollama sobre o confronto
 
-## Requisitos
+## 🚀 Como usar
 
-- Node.js 18+
-- npm 9+
+### 1. Configurar a API Backend
 
-## Instalar dependencias
+Certifique-se de que a API FastAPI está rodando:
 
 ```bash
-npm install
+# No diretório do backend
+uvicorn main:app --reload
 ```
 
-## Rodar em desenvolvimento
+A API estará disponível em `http://localhost:8000`
+
+### 2. Configurar URL da API (Opcional)
+
+Se sua API estiver em outro endereço, crie um arquivo `.env`:
 
 ```bash
-npm run dev
+cp .env.example .env
 ```
 
-Por padrao, o front usa `/api` como base das requisicoes.
+Edite o arquivo `.env` e altere a URL:
 
-## Configurar URL da API (opcional)
-
-Se a API estiver em outro host/porta, crie um arquivo `.env` na raiz com:
-
-```bash
-VITE_API_URL=http://127.0.0.1:8000
+```
+VITE_API_URL=http://localhost:8000
 ```
 
-## Build de producao
+### 3. Endpoints da API
 
-```bash
-npm run build
+O frontend consome os seguintes endpoints:
+
+- `GET /games/upcoming` - Lista de jogos futuros
+- `GET /match/{team1_id}/{team2_id}` - Comparação entre dois times
+- `GET /analysis/{team1_id}/{team2_id}` - Análise com IA
+
+### 4. Modo Offline
+
+Se a API não estiver disponível, o frontend mostra dados mock na página inicial para você testar a interface.
+
+## 📋 Requisitos da API
+
+Para que a análise com IA funcione, certifique-se de que:
+
+1. **Ollama está instalado e rodando**
+   ```powershell
+   # Windows PowerShell
+   irm https://ollama.com/install.ps1 | iex
+   ```
+
+2. **Modelo llama3:8b foi baixado**
+   ```bash
+   ollama run llama3:8b
+   ```
+
+3. **Dependências Python instaladas**
+   ```bash
+   pip install fastapi uvicorn nba_api pandas requests
+   ```
+
+## 🎨 Funcionalidades
+
+- ✅ Design responsivo e moderno
+- ✅ Tema escuro com gradientes NBA
+- ✅ Navegação entre páginas com React Router
+- ✅ Estatísticas detalhadas de times e jogadores
+- ✅ Histórico de confrontos diretos
+- ✅ Análise gerada por IA em português
+- ✅ Fallback para dados mock quando API offline
+
+## 🔧 Estrutura
+
 ```
-
-## Rotas da aplicacao
-
-- `/` lista de proximos jogos
-- `/match/:team1Id/:team2Id` comparacao entre times
-- `/analysis/:team1Id/:team2Id` analise textual do confronto
-
-## Observacoes
-
-- Este repositorio contem apenas o front-end.
-- Se a API estiver indisponivel, a tela inicial utiliza dados mock para exibicao basica.
+/src/app
+├── App.tsx                    # Componente principal com RouterProvider
+├── routes.tsx                 # Configuração de rotas
+├── components/
+│   └── Layout.tsx             # Layout com header e footer
+├── pages/
+│   ├── Home.tsx               # Lista de jogos futuros
+│   ├── MatchComparison.tsx    # Comparação detalhada
+│   └── AIAnalysis.tsx         # Análise com IA
+└── utils/
+    └── api.ts                 # Funções de chamada da API
+```

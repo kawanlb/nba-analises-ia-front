@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router";
-import { Calendar, Clock, Loader2 } from "lucide-react";
+import { Calendar, Clock, Loader2, ChevronRight } from "lucide-react";
 import { fetchUpcomingGames } from "../utils/api";
+import { TeamSearch } from "../components/TeamSearch";
 
 interface Team {
   id: number;
@@ -33,89 +34,97 @@ export function Home() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
-      {/* Hero Section */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-          Próximos Jogos da NBA
+    <div className="max-w-5xl mx-auto">
+      {/* Header Section */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 transition-colors">
+          Jogos da NBA
         </h1>
-        <p className="text-xl text-gray-300">
-          Clique em um jogo para ver estatísticas detalhadas e análise com IA
+        <p className="text-gray-600 dark:text-gray-400 transition-colors">
+          Clique em um jogo para ver estatísticas e análise detalhada
         </p>
+      </div>
+
+      {/* Team Search */}
+      <div className="mb-8 bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+        <div className="mb-4">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+            Comparar Times
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Pesquise e selecione dois times para comparar estatísticas
+          </p>
+        </div>
+        <TeamSearch />
       </div>
 
       {loading ? (
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="w-12 h-12 text-orange-500 animate-spin" />
+          <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-4">
           {games.map((game) => (
             <Link
               key={game.game_id}
               to={`/match/${game.home_team.id}/${game.away_team.id}`}
-              className="group"
+              className="block group"
             >
-              <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all hover:scale-105 hover:border-orange-500/50">
-                {/* Date and Time */}
-                <div className="flex items-center justify-between mb-6 text-gray-400 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Calendar size={16} />
-                    <span>{game.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock size={16} />
-                    <span>{game.time}</span>
-                  </div>
-                </div>
-
-                {/* Teams */}
-                <div className="space-y-4">
-                  {/* Away Team */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center overflow-hidden">
-                      <img
-                        src={game.away_team.logo}
-                        alt={game.away_team.name}
-                        className="w-12 h-12 object-contain"
-                      />
+              <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                <div className="p-5">
+                  {/* Date and Time */}
+                  <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4 pb-3 border-b border-gray-100 dark:border-gray-800 transition-colors">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar size={14} />
+                      <span>{game.date}</span>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-400">Visitante</p>
-                      <p className="text-white font-semibold">
-                        {game.away_team.name}
-                      </p>
+                    <div className="flex items-center gap-1.5">
+                      <Clock size={14} />
+                      <span>{game.time}</span>
                     </div>
                   </div>
 
-                  {/* VS Divider */}
-                  <div className="text-center">
-                    <span className="text-orange-500 font-bold text-lg">VS</span>
-                  </div>
-
-                  {/* Home Team */}
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center overflow-hidden">
-                      <img
-                        src={game.home_team.logo}
-                        alt={game.home_team.name}
-                        className="w-12 h-12 object-contain"
-                      />
+                  {/* Teams */}
+                  <div className="space-y-4">
+                    {/* Away Team */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 transition-colors">
+                          <img
+                            src={game.away_team.logo}
+                            alt={game.away_team.name}
+                            className="w-8 h-8 object-contain"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-gray-900 dark:text-white font-semibold text-base transition-colors">
+                            {game.away_team.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Visitante</p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs text-gray-400">Casa</p>
-                      <p className="text-white font-semibold">
-                        {game.home_team.name}
-                      </p>
+
+                    {/* Home Team */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 bg-gray-50 dark:bg-gray-800 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 transition-colors">
+                          <img
+                            src={game.home_team.logo}
+                            alt={game.home_team.name}
+                            className="w-8 h-8 object-contain"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-gray-900 dark:text-white font-semibold text-base transition-colors">
+                            {game.home_team.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">Casa</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="text-gray-400 dark:text-gray-600 group-hover:text-orange-500 transition-colors" size={20} />
                     </div>
                   </div>
-                </div>
-
-                {/* CTA */}
-                <div className="mt-6 pt-6 border-t border-white/10">
-                  <span className="text-orange-500 text-sm font-medium group-hover:text-orange-400">
-                    Ver análise completa →
-                  </span>
                 </div>
               </div>
             </Link>
@@ -123,16 +132,20 @@ export function Home() {
         </div>
       )}
 
-      {/* Info Card */}
-      <div className="mt-12 bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-        <h3 className="text-white font-semibold mb-2 flex items-center gap-2">
-          <span>💡</span> Como usar
-        </h3>
-        <p className="text-gray-300 text-sm">
-          Clique em qualquer jogo para ver estatísticas detalhadas dos times, histórico
-          de confrontos e uma análise gerada por IA.
-        </p>
-      </div>
+      {/* Empty State */}
+      {!loading && games.length === 0 && (
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center transition-colors">
+          <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors">
+            <Calendar className="text-gray-400 dark:text-gray-600" size={28} />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 transition-colors">
+            Nenhum jogo encontrado
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors">
+            Não há jogos programados para os próximos dias
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
-// Configuração da API
-// Em desenvolvimento, usamos /api para passar pelo proxy do Vite e evitar CORS.
-// Se necessário, sobrescreva com VITE_API_URL (ex.: http://127.0.0.1:8000).
+// Em desenvolvimento, /api passa pelo proxy do Vite e evita CORS.
+// Se precisar apontar direto para outra API, use VITE_API_URL.
 const API_BASE_URL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
 
 // Mock data for fallback when API is not available
@@ -84,8 +83,7 @@ export async function fetchAIAnalysis(team1Id: string, team2Id: string) {
   } catch (error) {
     console.error("Erro ao buscar análise de IA:", error);
     return {
-      analysis:
-        "Não foi possível gerar a análise. Verifique se a API está disponível e se a variável VITE_API_URL aponta para o backend correto."
+      analysis: "Não foi possível gerar a análise. Certifique-se de que:\n\n1. A API FastAPI está rodando (uvicorn main:app --reload)\n2. O Ollama está instalado e rodando\n3. O modelo llama3:8b foi baixado (ollama run llama3:8b)"
     };
   }
 }
