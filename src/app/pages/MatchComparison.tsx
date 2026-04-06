@@ -172,9 +172,9 @@ export function MatchComparison() {
         Voltar
       </Link>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[360px_minmax(0,1fr)] gap-6 items-start">
-        <aside className="space-y-4 xl:sticky xl:top-24">
-          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-5 transition-colors">
+      <div className="grid grid-cols-1 xl:grid-cols-[430px_minmax(0,1fr)] gap-7 items-start">
+        <aside className="space-y-5 xl:sticky xl:top-28">
+          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
               <div className="text-center">
                 <img src={team1.info.logo} alt={team1.info.name} className="w-12 h-12 mx-auto mb-2 object-contain" />
@@ -194,7 +194,7 @@ export function MatchComparison() {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-5 transition-colors">
+          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
             <div className="flex items-center gap-2 mb-3">
               <TrendingUp className="w-5 h-5 text-orange-500" />
               <h3 className="text-base font-bold text-gray-900 dark:text-white">Artilheiros da partida</h3>
@@ -256,7 +256,7 @@ export function MatchComparison() {
             </div>
           </div>
 
-          <div className="p-4 md:p-6">
+          <div className="p-5 md:p-7">
             {activeTab === "stats" && (
               <div>
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Estatísticas da temporada</h3>

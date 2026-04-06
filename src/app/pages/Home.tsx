@@ -95,14 +95,14 @@ export function Home() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.75fr)_minmax(360px,1fr)] gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,2fr)_minmax(420px,1fr)] gap-7 items-start">
         <div>
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
               {games.map((game) => (
                 <Link
                   key={game.game_id}
@@ -110,7 +110,7 @@ export function Home() {
                   className="block group"
                 >
                   <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 hover:border-orange-500 dark:hover:border-orange-500 transition-all hover:shadow-md">
-                    <div className="p-5">
+                    <div className="p-6">
                       {/* Date and Time */}
                       <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 mb-4 pb-3 border-b border-gray-100 dark:border-gray-800 transition-colors">
                         <div className="flex items-center gap-1.5">
@@ -187,10 +187,10 @@ export function Home() {
           )}
         </div>
 
-        <aside className="space-y-4 xl:sticky xl:top-24">
+        <aside className="space-y-5 xl:sticky xl:top-28">
           {/* Next Featured Game */}
           {!loading && featuredGame && (
-            <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
+            <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-7 transition-colors">
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-orange-500" />
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Próximo jogo em destaque</h2>
@@ -200,7 +200,7 @@ export function Home() {
                 to={`/match/${featuredGame.home_team.id}/${featuredGame.away_team.id}`}
                 className="block group"
               >
-                <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-[#1a1a27] dark:to-[#1e1e2e] p-5 hover:border-orange-500 transition-all">
+                <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-gradient-to-br from-gray-50 to-white dark:from-[#1a1a27] dark:to-[#1e1e2e] p-6 hover:border-orange-500 transition-all">
                   <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4">
                     <div className="flex items-center gap-1.5">
                       <Calendar size={14} />
@@ -248,7 +248,7 @@ export function Home() {
             </div>
           )}
 
-          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-5 transition-colors">
+          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
             <div className="flex items-center justify-between gap-2 mb-4">
               <div className="flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-orange-500" />
@@ -314,7 +314,7 @@ export function Home() {
             )}
           </div>
 
-          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-5 transition-colors">
+          <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
             <div className="flex items-center gap-2 mb-4">
               <Info className="w-5 h-5 text-orange-500" />
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Sobre</h2>
