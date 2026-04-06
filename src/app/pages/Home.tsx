@@ -10,7 +10,6 @@ import {
   Info,
 } from "lucide-react";
 import { fetchUpcomingGames, fetchMatchComparison } from "../utils/api";
-import { TeamSearch } from "../components/TeamSearch";
 import { formatDateBR, formatGameTimeBR } from "../utils/datetime";
 
 interface Team {
@@ -167,19 +166,6 @@ export function Home() {
 
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.75fr)_minmax(360px,1fr)] gap-6 items-start">
         <div>
-          {/* Team Search */}
-          <div className="mb-6 bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-6 transition-colors">
-            <div className="mb-4">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-                Comparar Times
-              </h2>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Pesquise e selecione dois times para comparar estatísticas
-              </p>
-            </div>
-            <TeamSearch />
-          </div>
-
           {loading ? (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="w-10 h-10 text-orange-500 animate-spin" />
