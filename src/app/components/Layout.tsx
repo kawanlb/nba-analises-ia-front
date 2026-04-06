@@ -49,7 +49,7 @@ export function Layout() {
       {/* Footer */}
       <footer className="bg-black/30 backdrop-blur-md border-t border-white/10 mt-16">
         <div className="container mx-auto px-4 py-6 text-center text-gray-400 text-sm">
-          <p>NBA Analytics API · FastAPI + Ollama AI</p>
+          <p>NBA Analytics Frontend</p>
         </div>
       </footer>
     </div>

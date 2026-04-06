@@ -38,7 +38,7 @@ export function AIAnalysis() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-white">Análise com IA</h1>
-            <p className="text-gray-400 text-sm">Powered by Ollama</p>
+            <p className="text-gray-400 text-sm">Dados vindos da API configurada</p>
           </div>
         </div>
 

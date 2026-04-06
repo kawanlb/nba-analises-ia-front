@@ -130,7 +130,7 @@ export function Home() {
         </h3>
         <p className="text-gray-300 text-sm">
           Clique em qualquer jogo para ver estatísticas detalhadas dos times, histórico
-          de confrontos e uma análise gerada por IA usando Ollama.
+          de confrontos e uma análise gerada por IA.
         </p>
       </div>
     </div>
