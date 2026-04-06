@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router";
 import { Loader2, ArrowLeft, Sparkles, TrendingUp } from "lucide-react";
 import { fetchMatchComparison, fetchAIAnalysis } from "../utils/api";
+import { formatDateBR } from "../utils/datetime";
 
 interface TeamInfo {
   id: number;
@@ -291,7 +292,7 @@ export function MatchComparison() {
             >
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  {new Date(game.date).toLocaleDateString('pt-BR')}
+                  {formatDateBR(game.date)}
                 </span>
                 
                 <div className="flex items-center gap-4 flex-1 justify-center">

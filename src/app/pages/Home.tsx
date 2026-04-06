@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Calendar, Clock, Loader2, ChevronRight } from "lucide-react";
 import { fetchUpcomingGames } from "../utils/api";
 import { TeamSearch } from "../components/TeamSearch";
+import { formatDateBR, formatGameTimeBR } from "../utils/datetime";
 
 interface Team {
   id: number;
@@ -76,11 +77,11 @@ export function Home() {
                   <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-4 pb-3 border-b border-gray-100 dark:border-gray-800 transition-colors">
                     <div className="flex items-center gap-1.5">
                       <Calendar size={14} />
-                      <span>{game.date}</span>
+                      <span>{formatDateBR(game.date)}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Clock size={14} />
-                      <span>{game.time}</span>
+                      <span>{formatGameTimeBR(game.time, game.date)}</span>
                     </div>
                   </div>
 
