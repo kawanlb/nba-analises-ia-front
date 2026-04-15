@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
+import { Loader2 } from "lucide-react";
+import { API_BASE_URL, API_STATUS_TIMEOUT_MS } from "../utils/api";
 
 type ConnectionStatus = "checking" | "connected" | "disconnected";
 
@@ -17,10 +16,11 @@ export function ApiStatus() {
 
   async function checkConnection() {
     try {
-      const response = await fetch(`${API_BASE_URL}/games/upcoming`, {
+      const response = await fetch(`${API_BASE_URL}/openapi.json`, {
         method: "GET",
-        signal: AbortSignal.timeout(5000), // 5 segundos de timeout
+        signal: AbortSignal.timeout(API_STATUS_TIMEOUT_MS),
       });
+
       setStatus(response.ok ? "connected" : "disconnected");
     } catch (error) {
       setStatus("disconnected");

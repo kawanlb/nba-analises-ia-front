@@ -3,3 +3,5 @@ dist/
 __pycache__/
 *.pyc
 NEW_FRONT/
+PR_DESCRIPTION.md
+.env

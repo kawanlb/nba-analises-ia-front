@@ -19,21 +19,25 @@ Rodar o projeto
 uvicorn main:app --reload
 
 Endpoints
-Jogos futuros
+Jogos por data
 
-GET /games/upcoming
+GET /games?date=YYYY-MM-DD
 
-Retorna os próximos jogos com times, data, horário e logos.
+Retorna os jogos de uma data específica com times, data, horário e logos.
 Dados do confronto
 
-GET /match/{team1_id}/{team2_id}
+GET /teams/{team_id}
+GET /matchups/{team1_id}/{team2_id}/history
+GET /matchups/{team1_id}/{team2_id}/top-scorers?limit=15
+GET /matchups/{team1_id}/{team2_id}/top-players?limit=10
 
-Retorna:
+Em conjunto, esses endpoints retornam:
 
     informações dos times
     estatísticas por jogo
-    melhores jogadores
-    histórico de confrontos (últimos 5 jogos)
+    melhores jogadores por métrica
+    histórico de confrontos
+    artilheiros do confronto
 
 Análise com IA
 
@@ -46,7 +50,7 @@ Retorna uma análise simples do confronto com:
     palpite de vencedor
 
 Exemplos de resposta
-Exemplo /games/upcoming
+Exemplo /games?date=YYYY-MM-DD
 
 Resposta:
 
@@ -67,77 +71,14 @@ Resposta:
   },
 ]
 
-Exemplo /match/{team1_id}/{team2_id}
+Exemplo da composição do confronto
 
-Resposta:
+O frontend agora monta a tela de comparação a partir de múltiplas respostas:
 
-{
-    "team1": {
-        "info": {
-            "id": 1610612766,
-            "name": "Charlotte Hornets",
-            "abbreviation": "CHA",
-            "logo": "https://cdn.nba.com/logos/nba/1610612766/global/L/logo.svg"
-        },
-        "stats": {
-            "points": 116.2,
-            "points_allowed": 111.4,
-            "rebounds": 46.2,
-            "assists": 26.4,
-            "turnovers": 15.5,
-            "fg_pct": 46.1
-        },
-        "players": {
-            "points": {
-                "name": "Brandon Miller",
-                "value": 20.4
-            },
-            "rebounds": {
-                "name": "Moussa Diabaté",
-                "value": 8.8
-            },
-            "assists": {
-                "name": "LaMelo Ball",
-                "value": 7.1
-            },
-            "steals": {
-                "name": "LaMelo Ball",
-                "value": 1.2
-            },
-            "blocks": {
-                "name": "Ryan Kalkbrenner",
-                "value": 1.5
-            },
-            "turnovers": {
-                "name": "LaMelo Ball",
-                "value": 2.7
-            },
-            "fg_pct": {
-                "name": "Kon Knueppel",
-                "percentage": 48.2,
-                "made": 6.4
-            },
-            "fg3_pct": {
-                "name": "Kon Knueppel",
-                "percentage": 43.1,
-                "made": 3.4
-            }
-        }
-    },
-    "team2": {
-        "info": {
-            "id": 1610612754,
-            "name": "Indiana Pacers",
-            "abbreviation": "IND",
-            "logo": "https://cdn.nba.com/logos/nba/1610612754/global/L/logo.svg"
-        },
-        "stats": {
-            "points": 112.6,
-            "points_allowed": 120.7,
-            "rebounds": 41.7,
-            "assists": 27.5,
-            "turnovers": 14.4,
-            "fg_pct": 45.9
+- `GET /teams/{team_id}` para dados completos de cada time
+- `GET /matchups/{team1_id}/{team2_id}/history` para histórico de confrontos
+- `GET /matchups/{team1_id}/{team2_id}/top-scorers?limit=15` para artilheiros
+- `GET /matchups/{team1_id}/{team2_id}/top-players?limit=10` para líderes por métrica
         },
         "players": {
             "points": {

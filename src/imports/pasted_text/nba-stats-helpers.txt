@@ -204,14 +204,13 @@ def get_upcoming_games():
     return games
 
 
-# MATCH
-@app.get("/match/{team1_id}/{team2_id}")
-def get_match(team1_id: int, team2_id: int):
-    return {
-        "team1": get_team_full(team1_id),
-        "team2": get_team_full(team2_id),
-        "head_to_head": get_h2h(team1_id, team2_id)
-    }
+# MATCHUPS SPLIT
+# The old aggregate /match/{team1_id}/{team2_id} endpoint is deprecated.
+# Frontends should compose the screen from:
+# - /teams/{team_id}
+# - /matchups/{team1_id}/{team2_id}/history
+# - /matchups/{team1_id}/{team2_id}/top-scorers
+# - /matchups/{team1_id}/{team2_id}/top-players
 
 
 # IA (SEPARADO)

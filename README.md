@@ -50,11 +50,17 @@ A interface suporta modo claro e escuro, com foco em contraste, legibilidade e a
 
 O frontend consome a API FastAPI por meio dos endpoints:
 
-- `GET /games/upcoming`
-- `GET /match/{team1_id}/{team2_id}`
+- `GET /games?date=YYYY-MM-DD`
+- `GET /teams/{team_id}`
+- `GET /matchups/{team1_id}/{team2_id}/history`
+- `GET /matchups/{team1_id}/{team2_id}/top-scorers?limit=15`
+- `GET /matchups/{team1_id}/{team2_id}/top-players?limit=10`
 - `GET /analysis/{team1_id}/{team2_id}`
+- `GET /players/top-scorers?limit=15`
+- `POST /auth/login`
+- `POST /auth/register`
 
-Se a API não estiver disponível, a aplicação mantém parte da experiência visual com dados mock.
+Na página inicial, o frontend agrega três chamadas autenticadas para `GET /games`, cobrindo hoje e os próximos dois dias.
 
 ## Estrutura principal
 
@@ -73,11 +79,19 @@ npm install
 
 ### 2. Configurar a API
 
-Se o backend estiver em outro endereço, criar um arquivo `.env` com:
+O projeto agora usa `.env` para definir a URL do backend. O arquivo padrão fica assim:
 
 ```bash
-VITE_API_URL=http://localhost:8000
+VITE_API_URL=http://127.0.0.1:8000
+VITE_API_TIMEOUT_MS=15000
+VITE_API_STATUS_TIMEOUT_MS=15000
 ```
+
+Se o backend estiver em outro endereço, ajuste `VITE_API_URL` no `.env`.
+
+Use `VITE_API_STATUS_TIMEOUT_MS` para ajustar a tolerancia da verificacao de disponibilidade. Isso evita marcar a API como offline quando ela responde com sucesso, mas demora mais de 5 segundos.
+
+As rotas protegidas exigem bearer token. O cadastro já retorna token e autentica o usuário automaticamente.
 
 ### 3. Iniciar o frontend
 
