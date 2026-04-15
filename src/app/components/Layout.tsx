@@ -1,11 +1,13 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { Home, Sun, Moon } from "lucide-react";
+import { Home, Sun, Moon, LogOut } from "lucide-react";
 import { ApiStatus } from "./ApiStatus";
 import { useTheme } from "../contexts/ThemeContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Layout() {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
 
   return (
     <div className="min-h-screen bg-[#f8f8f8] dark:bg-[#181829] transition-colors">
@@ -53,6 +55,20 @@ export function Layout() {
                   <span>Jogos</span>
                 </Link>
               </nav>
+
+              {user && (
+                <div className="flex items-center gap-3 ml-2">
+                  <span className="text-xs text-gray-500 dark:text-gray-400 hidden sm:inline">{user.email}</span>
+                  <button
+                    onClick={logout}
+                    className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-red-900/30 transition-all group"
+                    aria-label="Sair"
+                    title="Sair"
+                  >
+                    <LogOut size={18} className="text-gray-700 dark:text-gray-300 group-hover:text-red-500" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

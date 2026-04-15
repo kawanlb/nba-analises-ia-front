@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { useParams, Link } from "react-router";
 import {
   Loader2,
@@ -11,95 +11,22 @@ import {
   Bot,
   Info,
 } from "lucide-react";
-import { fetchMatchComparison, fetchAIAnalysis } from "../utils/api";
+import {
+  fetchMatchComparison,
+  fetchAIAnalysis,
+  type HeadToHeadGame,
+  type MatchComparisonResponse,
+  type MetricPlayer,
+  type PlayerLeader,
+  type ShootingLeader,
+  type TeamLeaders,
+  type TeamSummary,
+} from "../utils/api";
 import { formatDateBR } from "../utils/datetime";
-
-interface TeamInfo {
-  id: number;
-  name: string;
-  abbreviation: string;
-  logo: string;
-}
-
-interface Stats {
-  points: number;
-  points_allowed: number;
-  rebounds: number;
-  assists: number;
-  turnovers: number;
-  fg_pct: number;
-}
-
-interface Player {
-  name: string;
-  value?: number;
-  percentage?: number;
-  made?: number;
-}
-
-interface Players {
-  points: Player;
-  rebounds: Player;
-  assists: Player;
-  steals: Player;
-  blocks: Player;
-  turnovers: Player;
-  fg_pct: Player;
-  fg3_pct: Player;
-}
-
-interface Team {
-  info: TeamInfo;
-  stats: Stats;
-  players: Players;
-}
-
-interface HeadToHead {
-  date: string;
-  home_team: TeamInfo;
-  away_team: TeamInfo;
-  score: {
-    home: number;
-    away: number;
-  };
-  winner: string;
-}
-
-interface MatchData {
-  team1: Team;
-  team2: Team;
-  head_to_head: HeadToHead[];
-  top_players?: {
-    points?: Array<TopPlayerItem>;
-    rebounds?: Array<TopPlayerItem>;
-    assists?: Array<TopPlayerItem>;
-    steals?: Array<TopPlayerItem>;
-    blocks?: Array<TopPlayerItem>;
-    turnovers?: Array<TopPlayerItem>;
-  };
-  top_scorers?: Array<{
-    player_id: number;
-    name: string;
-    team_id: number;
-    team: string;
-    team_abbreviation: string;
-    points: number;
-    photo?: string;
-  }>;
-}
-
-interface TopPlayerItem {
-  player_id: number;
-  name: string;
-  team_id: number;
-  team: string;
-  team_abbreviation: string;
-  value: number;
-  photo?: string;
-}
 
 type MatchTab = "stats" | "players" | "h2h" | "analysis" | "about";
 type PlayerMetric = "points" | "rebounds" | "assists" | "steals" | "blocks" | "turnovers";
+type LeaderValue = PlayerLeader | ShootingLeader | null;
 
 const playerMetricLabel: Record<PlayerMetric, string> = {
   points: "Pontos",
@@ -112,7 +39,7 @@ const playerMetricLabel: Record<PlayerMetric, string> = {
 
 export function MatchComparison() {
   const { team1Id, team2Id } = useParams();
-  const [matchData, setMatchData] = useState<MatchData | null>(null);
+  const [matchData, setMatchData] = useState<MatchComparisonResponse | null>(null);
   const [aiAnalysis, setAiAnalysis] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingAI, setLoadingAI] = useState(false);
@@ -172,8 +99,31 @@ export function MatchComparison() {
   }
 
   const { team1, team2, head_to_head } = matchData;
-  const topScorers = matchData.top_scorers || [];
-  const topByMetric = matchData.top_players?.[activePlayerMetric] || [];
+
+  if (!team1.info || !team2.info) {
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white dark:bg-[#1e1e2e] rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center transition-colors">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 transition-colors">
+            Dados incompletos do confronto
+          </h3>
+          <p className="text-gray-700 dark:text-gray-300 mb-6 transition-colors">
+            A API retornou o confronto sem informações completas dos times.
+          </p>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-orange-500 hover:text-orange-600 font-medium"
+          >
+            <ArrowLeft size={18} />
+            Voltar para jogos
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const topScorers = matchData.top_scorers;
+  const topByMetric = matchData.top_players[activePlayerMetric];
   const team1Scorers = topByMetric.filter((p) => p.team_id === team1.info.id).slice(0, 10);
   const team2Scorers = topByMetric.filter((p) => p.team_id === team2.info.id).slice(0, 10);
 
@@ -367,6 +317,11 @@ export function MatchComparison() {
                     </div>
                   </div>
                 </div>
+
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  <TeamLeadersCard team={team1.info} leaders={team1.players} />
+                  <TeamLeadersCard team={team2.info} leaders={team2.players} />
+                </div>
               </div>
             )}
 
@@ -385,16 +340,7 @@ export function MatchComparison() {
                         </span>
 
                         <div className="flex items-center gap-4 flex-1 justify-center">
-                          <div className="flex items-center gap-2">
-                            <img
-                              src={game.home_team.logo}
-                              alt={game.home_team.name}
-                              className="w-6 h-6"
-                            />
-                            <span className="text-gray-900 dark:text-white font-semibold text-sm">
-                              {game.home_team.abbreviation}
-                            </span>
-                          </div>
+                          <HeadToHeadTeamBadge team={game.home_team} />
 
                           <div className="px-4 py-1 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
                             <span className={`font-bold text-sm ${game.score.home > game.score.away ? "text-green-600 dark:text-green-400" : "text-gray-600 dark:text-gray-300"}`}>
@@ -406,16 +352,7 @@ export function MatchComparison() {
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-900 dark:text-white font-semibold text-sm">
-                              {game.away_team.abbreviation}
-                            </span>
-                            <img
-                              src={game.away_team.logo}
-                              alt={game.away_team.name}
-                              className="w-6 h-6"
-                            />
-                          </div>
+                          <HeadToHeadTeamBadge team={game.away_team} reverse />
                         </div>
                       </div>
                     </div>
@@ -487,7 +424,7 @@ function TabButton({
   onClick,
 }: {
   label: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   active: boolean;
   onClick: () => void;
 }) {
@@ -519,7 +456,7 @@ function ScorerRow({
   scorer,
   label,
 }: {
-  scorer: TopPlayerItem;
+  scorer: MetricPlayer;
   label: string;
 }) {
   return (
@@ -546,20 +483,80 @@ function StatRow({ label, value }: { label: string; value: string | number }) {
   );
 }
 
-function PlayerStat({ label, player }: { label: string; player: Player }) {
+function TeamLeadersCard({ team, leaders }: { team: TeamSummary; leaders: TeamLeaders }) {
+  return (
+    <div className="rounded-lg border border-gray-200 dark:border-gray-800 p-4">
+      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        <img src={team.logo} alt={team.name} className="w-7 h-7 object-contain" />
+        <h4 className="font-semibold text-gray-900 dark:text-white">Líderes de {team.abbreviation}</h4>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-3">
+        <PlayerStat label="Pontos" player={leaders.points} />
+        <PlayerStat label="Rebotes" player={leaders.rebounds} />
+        <PlayerStat label="Assistências" player={leaders.assists} />
+        <PlayerStat label="Roubos" player={leaders.steals} />
+        <PlayerStat label="Bloqueios" player={leaders.blocks} />
+        <PlayerStat label="Turnovers" player={leaders.turnovers} />
+        <PlayerStat label="FG%" player={leaders.fg_pct} />
+        <PlayerStat label="3PT%" player={leaders.fg3_pct} />
+      </div>
+    </div>
+  );
+}
+
+function HeadToHeadTeamBadge({ team, reverse = false }: { team: HeadToHeadGame["home_team"]; reverse?: boolean }) {
+  if (!team) {
+    return (
+      <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+        <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <span>Time indisponível</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex items-center gap-2 ${reverse ? "flex-row-reverse" : ""}`}>
+      <img
+        src={team.logo}
+        alt={team.name}
+        className="w-6 h-6 object-contain"
+      />
+      <span className="text-gray-900 dark:text-white font-semibold text-sm">
+        {team.abbreviation}
+      </span>
+    </div>
+  );
+}
+
+function PlayerStat({ label, player }: { label: string; player: LeaderValue }) {
+  const value = formatLeaderValue(player);
+
   return (
     <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 transition-colors">
       <div className="flex justify-between items-center">
         <div>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{label}</p>
-          <p className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">{player.name}</p>
+          <p className="text-gray-900 dark:text-white font-semibold text-sm transition-colors">{player?.name || "Sem dados"}</p>
         </div>
         <div className="text-right">
           <p className="text-orange-600 dark:text-orange-400 font-bold text-base">
-            {player.value?.toFixed(1) || player.percentage?.toFixed(1) || "-"}
+            {value}
           </p>
         </div>
       </div>
     </div>
   );
+}
+
+function formatLeaderValue(player: LeaderValue) {
+  if (!player) {
+    return "-";
+  }
+
+  if ("percentage" in player) {
+    const made = Number.isFinite(player.made) ? ` (${player.made.toFixed(1)} convert.)` : "";
+    return `${player.percentage.toFixed(1)}%${made}`;
+  }
+
+  return player.value.toFixed(1);
 }

@@ -9,22 +9,8 @@ import {
   Sparkles,
   Info,
 } from "lucide-react";
-import { fetchUpcomingGames, fetchTopScorers } from "../utils/api";
+import { fetchUpcomingGames, fetchTopScorers, type TopScorer, type UpcomingGame } from "../utils/api";
 import { formatDateBR, formatGameTimeBR } from "../utils/datetime";
-
-interface Team {
-  id: number;
-  name: string;
-  logo: string;
-}
-
-interface Game {
-  game_id: string;
-  date: string;
-  time: string;
-  home_team: Team;
-  away_team: Team;
-}
 
 interface TopPerformer {
   key: string;
@@ -38,44 +24,63 @@ const MAX_PERFORMERS = 15;
 const DEFAULT_PERFORMERS = 5;
 
 export function Home() {
-  const [games, setGames] = useState<Game[]>([]);
+  const [games, setGames] = useState<UpcomingGame[]>([]);
   const [loading, setLoading] = useState(true);
   const [topPerformers, setTopPerformers] = useState<TopPerformer[]>([]);
   const [performanceLoading, setPerformanceLoading] = useState(false);
   const [showAllPerformers, setShowAllPerformers] = useState(false);
+  const [gamesError, setGamesError] = useState("");
+  const [performersError, setPerformersError] = useState("");
 
   useEffect(() => {
-    loadGames();
+    loadHomeData();
   }, []);
 
-  async function loadGames() {
+  async function loadHomeData() {
     setLoading(true);
-    const data = await fetchUpcomingGames();
-    setGames(data);
-
-    await loadTopPerformers();
-
-    setLoading(false);
-  }
-
-  async function loadTopPerformers() {
     setPerformanceLoading(true);
+    setGamesError("");
+    setPerformersError("");
 
-    const scorers = (await fetchTopScorers(MAX_PERFORMERS))
-      .filter((player) => player.name && player.points > 0)
-      .sort((a, b) => b.points - a.points)
-      .slice(0, MAX_PERFORMERS)
-      .map((player) => ({
-        key: `scorer-${player.player_id}`,
-        player: player.name,
-        team: player.team || player.team_abbreviation,
-        value: player.points,
-        photo: player.photo,
-      }));
+    const [gamesResult, scorersResult] = await Promise.allSettled([
+      fetchUpcomingGames(),
+      fetchTopScorers(MAX_PERFORMERS),
+    ]);
 
-    setTopPerformers(scorers);
+    if (gamesResult.status === "fulfilled") {
+      setGames(gamesResult.value);
+    } else {
+      console.error("Erro ao buscar jogos:", gamesResult.reason);
+      setGames([]);
+      setGamesError("Não foi possível carregar os jogos dos próximos dias.");
+    }
+
+    if (scorersResult.status === "fulfilled") {
+      const scorers = scorersResult.value
+        .filter((player: TopScorer) => player.name && player.points > 0)
+        .sort((a, b) => b.points - a.points)
+        .slice(0, MAX_PERFORMERS)
+        .map((player) => ({
+          key: `scorer-${player.player_id}`,
+          player: player.name,
+          team: player.team || player.team_abbreviation,
+          value: player.points,
+          photo: player.photo,
+        }));
+
+      setTopPerformers(scorers);
+      if (scorers.length === 0) {
+        setPerformersError("Nenhum destaque de pontuação foi retornado pela API.");
+      }
+    } else {
+      console.error("Erro ao buscar ranking global de jogadores:", scorersResult.reason);
+      setTopPerformers([]);
+      setPerformersError("Não foi possível carregar o ranking global de jogadores.");
+    }
+
     setShowAllPerformers(false);
     setPerformanceLoading(false);
+    setLoading(false);
   }
 
   const featuredGame = games[0];
@@ -178,10 +183,10 @@ export function Home() {
                 <Calendar className="text-gray-400 dark:text-gray-600" size={28} />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 transition-colors">
-                Nenhum jogo encontrado
+                {gamesError ? "Erro ao carregar jogos" : "Nenhum jogo encontrado"}
               </h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm transition-colors">
-                Não há jogos programados para os próximos dias
+                {gamesError || "Não há jogos programados para os próximos dias"}
               </p>
             </div>
           )}
@@ -309,7 +314,7 @@ export function Home() {
               </>
             ) : (
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                Não foi possível carregar os destaques dos jogadores no momento.
+                {performersError || "Não foi possível carregar os destaques dos jogadores no momento."}
               </p>
             )}
           </div>
@@ -320,7 +325,7 @@ export function Home() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-white">Sobre</h2>
             </div>
             <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-              Esta página reúne jogos da NBA em andamento e próximos confrontos para facilitar sua análise.
+              Esta página reúne jogos programados da NBA e próximos confrontos para facilitar sua análise.
               Você consegue comparar duas equipes, visualizar estatísticas-chave, conferir jogadores em destaque
               e gerar uma análise com IA para apoiar seus palpites.
             </p>
